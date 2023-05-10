@@ -4,15 +4,17 @@ const formRef = document.querySelector('.feedback-form');
 formRef.addEventListener('input', throttle(getValueOnForm, 500));
 formRef.addEventListener('submit', submitForm);
 
+const STORAGE_KEY = 'feedback-form-state';
 const dataForm = {};
+
 
 function getValueOnForm(evt) {
   dataForm[evt.target.name] = evt.target.value;
-  localStorage.setItem('feedback-form-state', JSON.stringify(dataForm));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
 }
 
 function auditLocalStorage() {
-  const feedBack = localStorage.getItem('feedback-form-state');
+  const feedBack = localStorage.getItem(STORAGE_KEY);
   const parsFeedBack = JSON.parse(feedBack);
   if (feedBack) {
     formRef.message.value = parsFeedBack.message || '';
@@ -22,7 +24,7 @@ function auditLocalStorage() {
 
 function submitForm(e) {
   e.preventDefault();
-  localStorage.removeItem('feedback-form-state');
+  localStorage.removeItem(STORAGE_KEY);
   const emailValue = e.currentTarget.email.value;
   const messageValue = e.currentTarget.message.value;
   const relustForm = {}
